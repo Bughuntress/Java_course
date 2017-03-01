@@ -20,7 +20,7 @@ public class Equation{
       n=2;
     } else {
       if (d==0) {
-        d=1;
+        n=1;
       } else {
         n=0;
       }
