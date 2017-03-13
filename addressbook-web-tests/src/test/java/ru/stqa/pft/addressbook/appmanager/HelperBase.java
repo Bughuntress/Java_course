@@ -7,7 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 /**
- * Created by Zakhidat on 26.02.2017.
+ * Created by Zakhidat on 28.02.2017.
  */
 public class HelperBase {
   protected WebDriver wd;
@@ -23,14 +23,11 @@ public class HelperBase {
   protected void type(By locator, String text) {
     click(locator);
     if (text != null) {
-      String existsingText = wd.findElement(locator).getAttribute("value");
-      if (! text.equals(existsingText)){
+      String existingText = wd.findElement(locator).getAttribute("value");
+      if (!text.equals(existingText)) {
         wd.findElement(locator).clear();
         wd.findElement(locator).sendKeys(text);
       }
-
-
-
     }
   }
 
@@ -42,6 +39,7 @@ public class HelperBase {
       return false;
     }
   }
+
   protected boolean isElementPressent(By locator) {
     try {
       wd.findElement(locator);

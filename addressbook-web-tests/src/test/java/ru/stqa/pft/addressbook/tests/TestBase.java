@@ -6,16 +6,14 @@ import org.testng.annotations.BeforeMethod;
 import ru.stqa.pft.addressbook.appmanager.ApplicationManager;
 
 /**
- * Created by Zakhidat on 22.02.2017.
+ * Created by Zakhidat on 27.02.2017.
  */
 public class TestBase {
+
 
   protected final ApplicationManager app = new ApplicationManager(BrowserType.CHROME);
 
   @BeforeMethod
-  //потом выполняет метод set up
-  //внутри метода инициализируется атрибут объекта
-  //и когда вызывается другой метод в том же самом объекте, он может этим атрибутом пользоваться
   public void setUp() throws Exception {
     app.init();
   }
@@ -24,5 +22,6 @@ public class TestBase {
   public void tearDown() {
     app.stop();
   }
+
 
 }
