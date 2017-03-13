@@ -1,26 +1,95 @@
-package ru.stqa.pft.addressbook.tests;
+package ru.stqa.pft.addressbook.appmanager;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import ru.stqa.pft.addressbook.model.GroupData;
 
 /**
- * Created by Zakhidat on 01.03.2017.
+ * Created by Zakhidat on 27.02.2017.
  */
-public class GroupModificationTests extends TestBase {
-  @Test
-  public void testGroupModification(){
-    int before = app.getGroupHelper().getGroupCount();
-    app.getNavigationHelper().gotoGroupPage();
-    if (!app.getGroupHelper().isThereAGroup()){
-      app.getGroupHelper().createGroup(new GroupData("Сказочные герои", "name", null));
+public class GroupHelper extends HelperBase {
+
+  public GroupHelper(WebDriver wd) {
+    super(wd);
+  }
+
+  public void returnToGroupPage() {
+    click(By.linkText("group page"));
+  }
+
+  public void submitGroupCreation() {
+    if (isElementPressent(By.tagName("h1"))
+            && wd.findElement(By.tagName("h1")).getText().equals("Groups")
+            && isElementPressent(By.name("submit"))) {
+      return;
     }
-    app.getGroupHelper().selectGroup();
-    app.getGroupHelper().initGroupModification();
-    app.getGroupHelper().fillGroupCreation(new GroupData("Сказочные герои", "name", "null"));
-    app.getGroupHelper().submitGroupModification();
-    app.getGroupHelper().returnToGroupPage();
-    int after = app.getGroupHelper().getGroupCount();//кол-во групп после добавления
-    Assert.assertEquals(after, before);
+    click(By.name("submit"));
+  }
+
+  public void fillGroupCreation(GroupData groupData) {
+    if (isElementPressent(By.tagName("h1"))
+            && wd.findElement(By.tagName("h1")).getText().equals("Groups")
+            && isElementPressent(By.name("submit"))) {
+      return;
+    }
+    type(By.name("group_name"), groupData.getName());
+    type(By.name("group_header"), groupData.getHeader());
+    type(By.name("group_footer"), groupData.getFooter());
+  }
+
+  public void initGroupCreation() {
+    if (isElementPressent(By.tagName("h1"))
+            && wd.findElement(By.tagName("h1")).getText().equals("Groups")
+            && isElementPressent(By.name("new"))) {
+      return;
+    }
+    click(By.name("new"));
+  }
+
+  public void deleteSelectedGroups() {
+    click(By.name("delete"));
+  }
+
+  public void selectGroup(int index) {
+    if (isElementPressent(By.tagName("h1"))
+            && wd.findElement(By.tagName("h1")).getText().equals("Groups")
+            && isElementPressent(By.name("new"))) {
+      return;
+    }
+    wd.findElements(By.name("selected[]")).get(index).click();
+  }
+
+  public void initGroupModification() {
+    if (isElementPressent(By.tagName("h1"))
+            && wd.findElement(By.tagName("h1")).getText().equals("Groups")
+            && isElementPressent(By.name("update"))) {
+      return;
+    }
+    click(By.name("edit"));
+  }
+
+  public void submitGroupModification() {
+    if (isElementPressent(By.tagName("h1"))
+            && wd.findElement(By.tagName("h1")).getText().equals("Groups")
+            && isElementPressent(By.name("update"))) {
+      return;
+    }
+    click(By.name("update"));
+  }
+
+  public void createGroup(GroupData group) {
+    initGroupCreation();
+    fillGroupCreation(group);
+    submitGroupCreation();
+    returnToGroupPage();
+  }
+
+  public boolean isThereAGroup() {
+    return isElementPressent(By.name("selected[]"));
+  }
+
+  public int getGroupCount() {
+    return wd.findElements(By.name("selected[]")).size();
   }
 }
